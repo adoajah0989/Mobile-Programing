@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -6,16 +9,17 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'demo Latihan 1',
+      title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 61, 158, 161)),
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 29, 104, 81)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Latihan 1 page'),
+      home: const MyHomePage(title: 'latihan flutter mengubah nama'),
     );
   }
 }
@@ -24,6 +28,7 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -31,24 +36,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> namaAnggotaKelompok = [
     'Nurmansyah',
-    'Teguh',
     'Gilang',
+    'Teguh',
     'Tegar',
-    'sofwan'
+    'Sofwan'
   ];
   int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _decrementCounter() {
-    setState(() {
-      _counter--;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +52,31 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'Nama anggota kelompok:',
+            Card(
+              elevation: 5,
+              child: SizedBox(
+                height: 200,
+                width: 500,
+                child: Image.network(
+                  'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-            const SizedBox(height: 10), // Spasi untuk kenyamanan tampilan
+            const Card.filled(
+                margin: EdgeInsets.only(top: 40.0),
+                child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      children: <Widget>[
+                        Text('Nama Anggota kelompok :',
+                            style: TextStyle(fontSize: 30.0)),
+                      ],
+                    ))),
+            const SizedBox(height: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -74,30 +85,41 @@ class _MyHomePageState extends State<MyHomePage> {
                     '- ${namaAnggotaKelompok[i]}',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
-                const SizedBox(height: 10),
-                Text('kamu telah menekan tombol sebanyak $_counter x'),
+                Text('kamu klik $_counter x')
               ],
             ),
+            Row(
+              children: <Widget[],
+            )
           ],
         ),
+        
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: _incrementCounter,
+            onPressed: () {
+              setState(() {
+                _counter++;
+              });
+            },
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
-          SizedBox(height: 10), // Spasi antara dua tombol
+          const SizedBox(height: 10),
           FloatingActionButton(
-            onPressed: _decrementCounter,
-            tooltip: 'Decrement', // Ubah tooltip agar sesuai
+            onPressed: () {
+              setState(() {
+                _counter--;
+              });
+            },
+            tooltip: 'Increment',
             child: const Icon(Icons.remove),
-          ),
+          )
         ],
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
