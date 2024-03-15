@@ -29,89 +29,157 @@ class _Tugas2State extends State<Tugas2> {
         ),
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'kamu menekan tombol $counter x',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        counter++;
-                      });
-                    },
-                    child: Text('Tambah'),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                const Text('contoh text :'),
-                const Text(
-                  'Ini TEXT',
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 20.0,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  height: 100,
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(11, 56, 102, 1), // Warna atas
+                          Color(0xFF95F9C3), // Warna bawah
+                        ],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Contoh Body :'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            'kamu menekan tombol $counter x',
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                counter++;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    8.0), // Atur sesuai kebutuhan
+                              ),
+                            ),
+                            child: const Text(
+                              'Tambah',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 249, 255, 255)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text('contoh Gambar :'),
-                Image.asset('assets/wallpaper.jpg'),
                 SizedBox(
                   height: 20,
                 ),
-                Text('contoh Icon :'),
-                Center(
-                  child: Container(
-                    width: 400,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.all(Radius.circular(
-                          10.0)), // Disertakan dalam objek BoxDecoration
-                    ),
-                    padding: EdgeInsets.all(16.0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Icon(Icons.access_alarm, color: Colors.white),
-                            Text('Alamr',style: TextStyle(color: Colors.white),)
-                          ],
+                Container(
+                  padding: EdgeInsets.all(10),
+                  height: 100,
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(11, 56, 102, 1), // Warna atas
+                          Color(0xFF95F9C3), // Warna bawah
+                        ],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Contoh text :'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            'contoh text berwarna kuning',
+                            style: TextStyle(color: Colors.yellow, fontSize: 30,fontWeight: FontWeight.bold),
+                          ),
+                          
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child:Column(children: <Widget>[
+                    const SizedBox(
+                        height: 20,
+                      ),
+                      const Text('contoh Gambar :'),
+                      Image.asset('assets/wallpaper.jpg',height: 200,),
+            
+                  ],),
+                ),
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      Text('contoh Icon :'),
+                      Center(
+                        child: Container(
+                          width: 400,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.all(Radius.circular(
+                                10.0)), // Disertakan dalam objek BoxDecoration
+                          ),
+                          padding: EdgeInsets.all(16.0),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Icon(Icons.access_alarm, color: Colors.white),
+                                  Text(
+                                    'Alamr',
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Icon(Icons.phone, color: Colors.white),
+                                  Text(
+                                    'Phone',
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Icon(Icons.book, color: Colors.white),
+                                  Text(
+                                    'Book',
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        Column(
-                          children: <Widget>[
-                            Icon(Icons.phone, color: Colors.white),
-                            Text('Phone',style: TextStyle(color: Colors.white),)
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Icon(Icons.book, color: Colors.white),
-                            Text('Book',style: TextStyle(color: Colors.white),)
-                          ],
-                        ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );

@@ -42,11 +42,11 @@ class tugas1 extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     for (var i = 0; i < namaAnggotaKelompok.length; i++)
-                      Card(
-                        elevation: 3,
+                      Card.outlined(
+                        elevation: 2,
                         margin: EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
                           leading:
