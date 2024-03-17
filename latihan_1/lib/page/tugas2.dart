@@ -15,14 +15,14 @@ class Tugas2 extends StatefulWidget {
 
 class _Tugas2State extends State<Tugas2> {
   int counter = 0;
-
+  TextEditingController _controller = TextEditingController();
+  String _nama = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
         title: const Text(
-          'Tugas 2',
+          'MODUL 2',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -33,7 +33,7 @@ class _Tugas2State extends State<Tugas2> {
           padding: const EdgeInsets.all(10.0),
           child: Container(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.all(10),
@@ -84,7 +84,7 @@ class _Tugas2State extends State<Tugas2> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 35,
                 ),
                 Container(
                   padding: EdgeInsets.all(10),
@@ -109,23 +109,89 @@ class _Tugas2State extends State<Tugas2> {
                         children: [
                           Text(
                             'contoh text berwarna kuning',
-                            style: TextStyle(color: Colors.yellow, fontSize: 30,fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Colors.yellow,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold),
                           ),
-                          
                         ],
                       ),
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 35,
+                ),
                 Container(
-                  child:Column(children: <Widget>[
-                    const SizedBox(
-                        height: 20,
+                  padding: EdgeInsets.all(10),
+                  height: 150,
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(11, 56, 102, 1), // Warna atas
+                          Color(0xFF95F9C3), // Warna bawah
+                        ],
                       ),
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Column(
+
+                    children: [
+                      Form(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Contoh Textfield :'),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _controller,
+                                    decoration: InputDecoration(
+                                        hintText: "Masukan Nama"),
+                                  ),
+                                ),
+                                SizedBox(
+                                    width:
+                                        10), // Jarak antara TextField dan tombol
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _nama = _controller.text;
+                                    });
+                                  },
+                                  child: Text('Simpan',
+                                      style: TextStyle(color: Colors.white)),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                                    height:
+                                        30),
+                            Text('Nama : $_nama',style: TextStyle(fontSize: 20),)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 35,
+                ),
+                Container(
+                  child: Column(
+                    children: <Widget>[
                       const Text('contoh Gambar :'),
-                      Image.asset('assets/wallpaper.jpg',height: 200,),
-            
-                  ],),
+                      Image.asset(
+                        'assets/wallpaper.jpg',
+                        height: 200,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 35,
                 ),
                 Container(
                   child: Column(

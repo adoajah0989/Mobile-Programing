@@ -15,9 +15,14 @@ class tugas1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Fungsi untuk kembali ke halaman sebelumnya
+          },
+        ),
         title: Text(
-          'Tugas 01',
+          'MODUL 1',
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -26,7 +31,7 @@ class tugas1 extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              const Card(
+               Container(
                   margin: EdgeInsets.only(top: 10.0, left: 10.0),
                   child: Padding(
                       padding: EdgeInsets.all(5.0),
