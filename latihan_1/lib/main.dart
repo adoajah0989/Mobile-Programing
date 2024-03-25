@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:latihan_1/page/tugas_page.dart';
 
 import './page/tugas1.dart';
 import './page/tugas2.dart';
@@ -102,39 +103,43 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromRGBO(11, 56, 102, 1), // Warna atas
-                        Color.fromRGBO(149, 249, 195, 1), // Warna bawah
-                      ],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(60, 0, 0, 0),
-                        blurRadius: 10.0, // ukuran blur
-                        spreadRadius: 1.0, // penyebaran bayangan
-                        offset: Offset(0, 0), // posisi bayangan (x, y)
-                      ),
-                    ],
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                height: 100,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: [
-                          Text('Halo, selamat datang!',style: TextStyle(fontSize: 20),),
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(11, 56, 102, 1), // Warna atas
+                          Color.fromRGBO(149, 249, 195, 1), // Warna bawah
                         ],
                       ),
-                    )
-                  ],
-                )
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(60, 0, 0, 0),
+                          blurRadius: 10.0, // ukuran blur
+                          spreadRadius: 1.0, // penyebaran bayangan
+                          offset: Offset(0, 0), // posisi bayangan (x, y)
+                        ),
+                      ],
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  height: 100,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Halo, selamat datang!',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+              SizedBox(
+                height: 60,
               ),
-              SizedBox(height: 60,),
               Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -164,7 +169,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              //
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => tugasPage()),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -251,98 +260,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ]),
               ),
-              const SizedBox(height: 20),
-              Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromRGBO(11, 56, 102, 1), // Warna atas
-                        Color.fromRGBO(149, 249, 195, 1), // Warna bawah
-                      ],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(60, 0, 0, 0),
-                        blurRadius: 10.0, // ukuran blur
-                        spreadRadius: 1.0, // penyebaran bayangan
-                        offset: Offset(0, 0), // posisi bayangan (x, y)
-                      ),
-                    ],
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                height: 150,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(children: <Widget>[
-                        Text(
-                          'Daftar Tugas',
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Color.fromARGB(255, 246, 255, 251)),
-                        ),
-                      ]),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => tugas1()),
-                              );
-                            },
-                            child: const Text(
-                              'modul 01',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 249, 255, 255)),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Tugas2()),
-                              );
-                            },
-                            child: const Text(
-                              'modul 02',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 249, 255, 255)),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => tugas3()),
-                              );
-                            },
-                            child: const Text(
-                              'modul 03',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 249, 255, 255)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              
-              
             ],
           ),
         ),
