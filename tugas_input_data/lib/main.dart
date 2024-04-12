@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tugas_input_data/pages/home.dart';
+
+import 'package:tugas_input_data/pages/signin.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,20 +37,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
+
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/background.png'), // URL gambar
-              fit: BoxFit.cover,
+          // decoration: const BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage('assets/images/background.png'), // URL gambar
+          //     fit: BoxFit.cover,
               
-            ),
-          ),
+          //   ),
+          // ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -59,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 400,
                     width: 400,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -80,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  Text('kemudahan dalam melihat data')
+                  const Text('kemudahan dalam melihat data')
                 ],
               ),
               Row(
@@ -92,16 +97,29 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 50,
                         width: 300,
                         child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder:(context)=> const LoginScreen()));
+                            },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(
-                                "Login",
-                                style: TextStyle(color: Colors.white),
-                              ),
+                            child: Text(
+                              "Login",
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ),
+                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 40,
+                        width: 250,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder:(context)=> const home()));
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue[200]),
+                            child: Text(
+                              "home",
+                              style: TextStyle(color: Colors.white),
                             )),
                       ),
                       const SizedBox(
@@ -109,8 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Row(
                         children: [
-                          Text("belum punya akun? "),
-                          TextButton(onPressed: () {}, child: Text("Register")),
+                          const Text("belum punya akun? "),
+                          TextButton(onPressed: () {}, child: const Text("Register")),
                         ],
                       ),
                     ],
@@ -121,6 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+      
     );
+    
   }
 }
