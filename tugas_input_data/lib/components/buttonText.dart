@@ -30,6 +30,7 @@ class CustomTextButton extends StatelessWidget {
             child: Text(
               icon,
               style: TextStyle(
+                
                 fontSize: 30,
                 color: Color.fromRGBO(255, 255, 255, 1),
               ),

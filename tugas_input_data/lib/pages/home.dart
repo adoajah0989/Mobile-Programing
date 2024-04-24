@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:tugas_input_data/components/buttonText.dart';
+import 'package:tugas_input_data/pages/MenuMaster.dart';
+import 'package:tugas_input_data/pages/dataLayanan.dart';
 
 class home extends StatelessWidget {
   const home({Key? key}) : super(key: key);
@@ -122,7 +124,9 @@ class home extends StatelessWidget {
                             children: [
                               CustomTextButton(
                                 icon: "📊",
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder:(context)=> DataJenisPage()));
+                                },
                                 Judul: 'Data master',
                               ),
                               CustomTextButton(
@@ -132,7 +136,9 @@ class home extends StatelessWidget {
                               ),
                               CustomTextButton(
                                 icon: "📋",
-                                onPressed: () {},
+                                onPressed: () {
+                                  
+                                },
                                 Judul: 'Laporan',
                               ),
                             ],
