@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:latihan_1/page/tugas4.dart';
 import 'package:latihan_1/page/tugas5.dart';
+import 'package:latihan_1/page/tugas6.dart';
 import '../page/tugas1.dart';
 import '../page/tugas2.dart';
 import '../page/tugas3.dart';
@@ -57,8 +59,8 @@ class daftar_tugas extends StatelessWidget {
                         },
                         child: const Text(
                           'modul 01',
-                          style:
-                              TextStyle(color: Color.fromARGB(255, 249, 255, 255)),
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 249, 255, 255)),
                         ),
                       ),
                       ElevatedButton(
@@ -70,8 +72,8 @@ class daftar_tugas extends StatelessWidget {
                         },
                         child: const Text(
                           'modul 02',
-                          style:
-                              TextStyle(color: Color.fromARGB(255, 249, 255, 255)),
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 249, 255, 255)),
                         ),
                       ),
                       ElevatedButton(
@@ -83,13 +85,12 @@ class daftar_tugas extends StatelessWidget {
                         },
                         child: const Text(
                           'modul 03',
-                          style:
-                              TextStyle(color: Color.fromARGB(255, 249, 255, 255)),
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 249, 255, 255)),
                         ),
                       ),
                     ],
                   ),
-                  
                 ],
               ),
             ),
@@ -105,13 +106,13 @@ class daftar_tugas extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => tugas1()),
+                          MaterialPageRoute(builder: (context) => tugas4()),
                         );
                       },
                       child: const Text(
                         'modul 04',
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 249, 255, 255)),
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 249, 255, 255)),
                       ),
                     ),
                     ElevatedButton(
@@ -123,26 +124,25 @@ class daftar_tugas extends StatelessWidget {
                       },
                       child: const Text(
                         'modul 05',
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 249, 255, 255)),
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 249, 255, 255)),
                       ),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => tugas3()),
+                          MaterialPageRoute(builder: (context) => tugas6()),
                         );
                       },
                       child: const Text(
                         'modul 06',
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 249, 255, 255)),
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 249, 255, 255)),
                       ),
                     ),
                   ],
                 ),
-                
               ],
             ),
           ),

@@ -10,10 +10,15 @@ import 'package:latihan_1/page/tugas_page.dart';
 import './page/tugas1.dart';
 import './page/tugas2.dart';
 import './page/tugas3.dart';
+import './page/tugas4.dart';
 import './page/list_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(
+    home: MyApp(),
+    debugShowCheckedModeBanner: false,
+    // Halaman yang ingin ditampilkan
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,6 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      home: const MyHomePage(title: 'Tugas Mobile Programming'),
       theme: ThemeData(
         colorScheme: ColorScheme.dark(primary: Color.fromRGBO(34, 34, 34, 1)),
         scaffoldBackgroundColor: Color.fromRGBO(24, 24, 24, 1),
@@ -34,7 +40,6 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Tugas Mobile Programming'),
     );
   }
 }

@@ -10,7 +10,7 @@ const users = {
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  Duration get loginTime => const Duration(milliseconds: 1000);
+  Duration get loginTime => const Duration(milliseconds: 200);
 
   Future<String?> _authUser(LoginData data) {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
@@ -36,7 +36,6 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        
         child: FlutterLogin(
           onLogin: _authUser,
           onSignup: _signupUser,
@@ -44,7 +43,7 @@ class LoginScreen extends StatelessWidget {
           logo: const AssetImage('assets/images/analytics.png'),
           scrollable: true,
           theme: LoginTheme(
-              pageColorLight: Colors.white,
+              pageColorLight: const Color.fromARGB(255, 255, 255, 255),
               pageColorDark: Color.fromARGB(255, 28, 201, 253),
               titleStyle: TextStyle(
                   color: Colors.blue[700], fontWeight: FontWeight.bold)),
@@ -63,7 +62,7 @@ class LoginScreen extends StatelessWidget {
         child: Icon(Icons.arrow_back),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
     );
   }
 }

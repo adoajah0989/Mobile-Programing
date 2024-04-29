@@ -10,8 +10,8 @@ import 'package:tugas_input_data/pages/signin.dart';
 
 void main() {
   runApp(MaterialApp(
-    home:MyApp(), 
-    debugShowCheckedModeBanner: false,// Halaman yang ingin ditampilkan
+    home: MyApp(),
+    debugShowCheckedModeBanner: false, // Halaman yang ingin ditampilkan
   ));
 }
 
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'aplikasi data',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Lato',
@@ -43,10 +43,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //   image: DecorationImage(
           //     image: AssetImage('assets/images/background.png'), // URL gambar
           //     fit: BoxFit.cover,
-              
+
           //   ),
           // ),
           child: Column(
@@ -104,7 +100,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: 300,
                         child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder:(context)=> const LoginScreen()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()));
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue),
@@ -113,13 +113,18 @@ class _MyHomePageState extends State<MyHomePage> {
                               style: TextStyle(color: Colors.white),
                             )),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       SizedBox(
                         height: 40,
                         width: 250,
                         child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder:(context)=> const home()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const home()));
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue[200]),
@@ -134,7 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       Row(
                         children: [
                           const Text("belum punya akun? "),
-                          TextButton(onPressed: () {}, child: const Text("Register")),
+                          TextButton(
+                              onPressed: () {}, child: const Text("Register")),
                         ],
                       ),
                     ],
@@ -145,8 +151,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      
     );
-    
   }
 }
