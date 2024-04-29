@@ -57,7 +57,7 @@ class home extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                height: 400,
+                height: 300,
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                     color: Colors.blue[300],
@@ -91,8 +91,10 @@ class home extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10.0),
                     child: Text(
                       'Menu',
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: Color.fromRGBO(27, 27, 27, 1)),
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(27, 27, 27, 1)),
                     ),
                   )
                 ],
@@ -125,7 +127,10 @@ class home extends StatelessWidget {
                               CustomTextButton(
                                 icon: "📊",
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder:(context)=> DataJenisPage()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MenuMaster()));
                                 },
                                 Judul: 'Data master',
                               ),
@@ -136,9 +141,7 @@ class home extends StatelessWidget {
                               ),
                               CustomTextButton(
                                 icon: "📋",
-                                onPressed: () {
-                                  
-                                },
+                                onPressed: () {},
                                 Judul: 'Laporan',
                               ),
                             ],

@@ -16,7 +16,6 @@ class CustomTextButton extends StatelessWidget {
     return Column(
       children: [
         Container(
-          
           width: 80,
           height: 60,
           child: TextButton(
@@ -30,14 +29,22 @@ class CustomTextButton extends StatelessWidget {
             child: Text(
               icon,
               style: TextStyle(
-                
                 fontSize: 30,
                 color: Color.fromRGBO(255, 255, 255, 1),
               ),
             ),
           ),
         ),
-        Text(style: TextStyle(fontWeight: FontWeight.w600,color: Color.fromRGBO(27, 27,27, 1)),Judul),
+        Text(
+          Judul,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Color.fromRGBO(27, 27, 27, 1),
+          ),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          // Jika teks terlalu panjang, gunakan ellipsis
+        ),
       ],
     );
   }

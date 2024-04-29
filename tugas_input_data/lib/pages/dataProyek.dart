@@ -1,73 +1,95 @@
-import 'dart:convert'; // Tambahkan baris ini untuk mengimpor dart:convert
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Task {
-  String kodeLayanan;
-  String Layanan;
+class Customer {
+  String pelangganProyek;
+  String Pelanggan;
+  String telpFax;
+  String email;
 
-  Task({
-    required this.kodeLayanan,
-    required this.Layanan,
+  Customer({
+    required this.pelangganProyek,
+    required this.Pelanggan,
+    required this.telpFax,
+    required this.email,
   });
 
-  factory Task.fromJson(String json) => Task(
-        kodeLayanan: jsonDecode(json)['kodeLayanan'] as String,
-        Layanan: jsonDecode(json)['Layanan'] as String,
+  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+        pelangganProyek: json['pelangganProyek'] as String,
+        Pelanggan: json['Pelanggan'] as String,
+        telpFax: json['telpFax'] as String,
+        email: json['email'] as String,
       );
 
-  String toJson() => jsonEncode({
-        'kodeLayanan': kodeLayanan,
-        'Layanan': Layanan,
-      });
+  Map<String, dynamic> toJson() => {
+        'pelangganProyek': pelangganProyek,
+        'Pelanggan': Pelanggan,
+        'telpFax': telpFax,
+        'email': email,
+      };
 }
 
-class DataJenisPage extends StatefulWidget {
+class DataProyek extends StatefulWidget {
   @override
-  _DataJenisPageState createState() => _DataJenisPageState();
+  _DataProyekState createState() => _DataProyekState();
 }
 
-class _DataJenisPageState extends State<DataJenisPage> {
-  List<Task> tasks = [];
-  final TextEditingController _LayananController = TextEditingController();
-  String? _selectedKodeLayanan;
+class _DataProyekState extends State<DataProyek> {
+  List<Customer> customers = [];
+  final TextEditingController _PelangganController = TextEditingController();
+  final TextEditingController _telpFaxController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  String? _selectedpelangganProyek;
 
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
-    final encodedData = prefs.getStringList('tasks');
+    final encodedData = prefs.getStringList('customers');
     if (encodedData != null) {
       setState(() {
-        tasks = encodedData.map((data) => Task.fromJson(data)).toList();
+        customers = encodedData
+            .map((data) => Customer.fromJson(jsonDecode(data)))
+            .toList();
       });
     }
   }
 
   Future<void> _saveData() async {
     final prefs = await SharedPreferences.getInstance();
-    final encodedData = tasks.map((task) => task.toJson()).toList();
-    prefs.setStringList('tasks', encodedData);
+    final encodedData =
+        customers.map((customer) => jsonEncode(customer.toJson())).toList();
+    prefs.setStringList('customers', encodedData);
   }
 
-  void addTask() {
-    final String Layanan = _LayananController.text;
+  void addCustomer() {
+    final String Pelanggan = _PelangganController.text;
+    final String telpFax = _telpFaxController.text;
+    final String email = _emailController.text;
 
-    if (_selectedKodeLayanan == null || Layanan.isEmpty) {
-      showToast('Kode layanan dan nama layanan tidak boleh kosong');
+    if (_selectedpelangganProyek == null ||
+        Pelanggan.isEmpty ||
+        telpFax.isEmpty ||
+        email.isEmpty) {
+      showToast('Semua field harus diisi');
       return;
     }
 
-    final newTask = Task(
-      kodeLayanan: _selectedKodeLayanan!,
-      Layanan: Layanan,
+    final newCustomer = Customer(
+      pelangganProyek: _selectedpelangganProyek!,
+      Pelanggan: Pelanggan,
+      telpFax: telpFax,
+      email: email,
     );
 
     setState(() {
-      tasks.add(newTask);
+      customers.add(newCustomer);
     });
 
-    _LayananController.clear();
+    _PelangganController.clear();
+    _telpFaxController.clear();
+    _emailController.clear();
   }
 
   void showToast(String message) {
@@ -85,16 +107,16 @@ class _DataJenisPageState extends State<DataJenisPage> {
   void onChangedFunction(value) {
     setState(() {
       if (value != null) {
-        _selectedKodeLayanan = value;
+        _selectedpelangganProyek = value;
       } else {
         showToast('Nilai tidak boleh kosong');
       }
     });
   }
 
-  void deleteTask(int index) {
+  void deleteCustomer(int index) {
     setState(() {
-      tasks.removeAt(index);
+      customers.removeAt(index);
     });
   }
 
@@ -108,15 +130,15 @@ class _DataJenisPageState extends State<DataJenisPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Data Jenis Layanan'),
+        title: Text('Data Proyek'),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: tasks.length,
+              itemCount: customers.length,
               itemBuilder: (context, index) {
-                final task = tasks[index];
+                final customer = customers[index];
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   padding: EdgeInsets.all(10),
@@ -127,27 +149,31 @@ class _DataJenisPageState extends State<DataJenisPage> {
                     title: RichText(
                       text: TextSpan(
                         style: const TextStyle(
-                          color: Colors.white, // Ganti dengan warna yang sesuai
-                          fontSize: 16, // Ganti dengan ukuran font yang sesuai
+                          color: Colors.white,
+                          fontSize: 16,
                         ),
                         children: [
                           const TextSpan(
-                            text: 'Kode Layanan: ',
+                            text: 'Kode Pelanggan: ',
                             style: TextStyle(
                               fontWeight: FontWeight.w200,
-                              // Ganti dengan gaya font yang sesuai
                             ),
                           ),
                           TextSpan(
-                            text: task.kodeLayanan,
-                            style: const TextStyle(
-                                // Gaya font untuk kode layanan bisa berbeda di sini
-                                ),
+                            text: customer.pelangganProyek,
+                            style: const TextStyle(),
                           ),
                         ],
                       ),
                     ),
-                    subtitle: Text('Nama Layanan: ${task.Layanan}'),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Nama Pelanggan: ${customer.Pelanggan}'),
+                        Text('Telp/Fax: ${customer.telpFax}'),
+                        Text('Email: ${customer.email}'),
+                      ],
+                    ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
@@ -162,8 +188,8 @@ class _DataJenisPageState extends State<DataJenisPage> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    deleteTask(index);
-                                    _saveData(); // Simpan perubahan setelah menghapus data
+                                    deleteCustomer(index);
+                                    _saveData();
                                   },
                                   child: Text('Hapus'),
                                 ),
@@ -197,8 +223,8 @@ class _DataJenisPageState extends State<DataJenisPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<String>(
-                      value: _selectedKodeLayanan,
-                      items: ["A001", "A002", "A003"]
+                      value: _selectedpelangganProyek,
+                      items: ["P001", "P002", "P003"]
                           .map((kode) => DropdownMenuItem<String>(
                                 value: kode,
                                 child: Text(kode),
@@ -209,13 +235,27 @@ class _DataJenisPageState extends State<DataJenisPage> {
                           onChangedFunction(value);
                         });
                       },
-                      decoration: InputDecoration(labelText: 'Kode Layanan'),
+                      decoration: InputDecoration(labelText: 'Kode Pelanggan'),
                     ),
                     SizedBox(height: 10),
                     TextFormField(
-                      controller: _LayananController,
+                      controller: _PelangganController,
                       decoration: InputDecoration(
-                        labelText: 'Nama Layanan',
+                        labelText: 'Nama Pelanggan',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: _telpFaxController,
+                      decoration: InputDecoration(
+                        labelText: 'Telp/Fax',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
                       ),
                     ),
                   ],
@@ -223,9 +263,9 @@ class _DataJenisPageState extends State<DataJenisPage> {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      addTask();
+                      addCustomer();
                       Navigator.pop(context);
-                      _saveData(); // Simpan perubahan setelah menambahkan data
+                      _saveData();
                     },
                     child: Text('Tambah'),
                   ),
@@ -251,6 +291,6 @@ class _DataJenisPageState extends State<DataJenisPage> {
 
 void main() {
   runApp(MaterialApp(
-    home: DataJenisPage(),
+    home: DataProyek(),
   ));
 }
