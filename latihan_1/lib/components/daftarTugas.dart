@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:latihan_1/page/tugas4.dart';
 import 'package:latihan_1/page/tugas5.dart';
 import 'package:latihan_1/page/tugas6.dart';
+import 'package:latihan_1/page/tugas7.dart';
 import '../page/tugas1.dart';
 import '../page/tugas2.dart';
 import '../page/tugas3.dart';
@@ -18,136 +19,229 @@ class daftar_tugas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 150,
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(11, 56, 102, 1), // Warna atas
-              Color.fromRGBO(149, 249, 195, 1), // Warna bawah
-            ],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromARGB(60, 0, 0, 0),
-              blurRadius: 10.0, // ukuran blur
-              spreadRadius: 1.0, // penyebaran bayangan
-              offset: Offset(0, 0), // posisi bayangan (x, y)
-            ),
-          ],
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Column(
+      children: [
+        Container(
+          height: 150,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.fromRGBO(11, 56, 102, 1), // Warna atas
+                  Color.fromRGBO(149, 249, 195, 1), // Warna bawah
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromARGB(60, 0, 0, 0),
+                  blurRadius: 10.0, // ukuran blur
+                  spreadRadius: 1.0, // penyebaran bayangan
+                  offset: Offset(0, 0), // posisi bayangan (x, y)
+                ),
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => tugas1()),
-                          );
-                        },
-                        child: const Text(
-                          'modul 01',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 249, 255, 255)),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Tugas2()),
-                          );
-                        },
-                        child: const Text(
-                          'modul 02',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 249, 255, 255)),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => tugas3()),
-                          );
-                        },
-                        child: const Text(
-                          'modul 03',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 249, 255, 255)),
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => tugas1()),
+                              );
+                            },
+                            child: const Text(
+                              'modul 01',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 249, 255, 255)),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Tugas2()),
+                              );
+                            },
+                            child: const Text(
+                              'modul 02',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 249, 255, 255)),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => tugas3()),
+                              );
+                            },
+                            child: const Text(
+                              'modul 03',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 249, 255, 255)),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => tugas4()),
-                        );
-                      },
-                      child: const Text(
-                        'modul 04',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 249, 255, 255)),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Tugas5()),
-                        );
-                      },
-                      child: const Text(
-                        'modul 05',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 249, 255, 255)),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => tugas6()),
-                        );
-                      },
-                      child: const Text(
-                        'modul 06',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 249, 255, 255)),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => tugas4()),
+                            );
+                          },
+                          child: const Text(
+                            'modul 04',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 249, 255, 255)),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Tugas5()),
+                            );
+                          },
+                          child: const Text(
+                            'modul 05',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 249, 255, 255)),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => tugas6()),
+                            );
+                          },
+                          child: const Text(
+                            'modul 06',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 249, 255, 255)),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          height: 150,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.fromRGBO(11, 56, 102, 1), // Warna atas
+                  Color.fromRGBO(149, 249, 195, 1), // Warna bawah
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromARGB(60, 0, 0, 0),
+                  blurRadius: 10.0, // ukuran blur
+                  spreadRadius: 1.0, // penyebaran bayangan
+                  offset: Offset(0, 0), // posisi bayangan (x, y)
+                ),
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Tugas7()),
+                              );
+                            },
+                            child: const Text(
+                              'modul 07',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 249, 255, 255)),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Tugas2()),
+                              );
+                            },
+                            child: const Text(
+                              'modul 08',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 249, 255, 255)),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => tugas3()),
+                              );
+                            },
+                            child: const Text(
+                              'modul 09',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 249, 255, 255)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
