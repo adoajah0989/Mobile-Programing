@@ -1,5 +1,6 @@
 import 'dart:convert'; // Tambahkan baris ini untuk mengimpor dart:convert
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +33,7 @@ class DataJenisPage extends StatefulWidget {
 class _DataJenisPageState extends State<DataJenisPage> {
   List<Task> tasks = [];
   final TextEditingController _LayananController = TextEditingController();
+  FirebaseFirestore db = FirebaseFirestore.instance;
   String? _selectedKodeLayanan;
 
   Future<void> _loadData() async {
@@ -188,60 +190,70 @@ class _DataJenisPageState extends State<DataJenisPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Tambah Data'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      value: _selectedKodeLayanan,
-                      items: ["A001", "A002", "A003"]
-                          .map((kode) => DropdownMenuItem<String>(
-                                value: kode,
-                                child: Text(kode),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          onChangedFunction(value);
-                        });
-                      },
-                      decoration: InputDecoration(labelText: 'Kode Layanan'),
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: _LayananController,
-                      decoration: InputDecoration(
-                        labelText: 'Nama Layanan',
-                      ),
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      addTask();
-                      Navigator.pop(context);
-                      _saveData(); // Simpan perubahan setelah menambahkan data
-                    },
-                    child: Text('Tambah'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Batal',
-                      style: TextStyle(color: Colors.red[400]),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return AlertDialog(
+          //       title: Text('Tambah Data'),
+          //       content: Column(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           DropdownButtonFormField<String>(
+          //             value: _selectedKodeLayanan,
+          //             items: ["A001", "A002", "A003"]
+          //                 .map((kode) => DropdownMenuItem<String>(
+          //                       value: kode,
+          //                       child: Text(kode),
+          //                     ))
+          //                 .toList(),
+          //             onChanged: (value) {
+          //               setState(() {
+          //                 onChangedFunction(value);
+          //               });
+          //             },
+          //             decoration: InputDecoration(labelText: 'Kode Layanan'),
+          //           ),
+          //           SizedBox(height: 10),
+          //           TextFormField(
+          //             controller: _LayananController,
+          //             decoration: InputDecoration(
+          //               labelText: 'Nama Layanan',
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //       actions: [
+          //         TextButton(
+          //           onPressed: () {
+          //             addTask();
+          //             Navigator.pop(context);
+          //             _saveData(); // Simpan perubahan setelah menambahkan data
+          //           },
+          //           child: Text('Tambah'),
+          //         ),
+          //         TextButton(
+          //           onPressed: () {
+          //             Navigator.pop(context);
+          //           },
+          //           child: Text(
+          //             'Batal',
+          //             style: TextStyle(color: Colors.red[400]),
+          //           ),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
+          // Create a new user with a first and last name
+          final user = <String, dynamic>{
+            "first": "Ada",
+            "last": "Lovelace",
+            "born": 1815
+          };
+
+// Add a new document with a generated ID
+          db.collection("users").add(user).then((DocumentReference doc) =>
+              print('DocumentSnapshot added with ID: ${doc.id}'));
         },
         child: Icon(Icons.add),
       ),

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tugas_input_data/firebase_options.dart';
 import 'package:tugas_input_data/pages/MenuMaster.dart';
 import 'package:tugas_input_data/pages/home.dart';
 
@@ -8,10 +11,17 @@ import './pages/MenuMaster.dart';
 
 import 'package:tugas_input_data/pages/signin.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(MaterialApp(
     home: MyApp(),
-    debugShowCheckedModeBanner: false, // Halaman yang ingin ditampilkan
+    debugShowCheckedModeBanner: false,
+    // Halaman yang ingin ditampilkan
   ));
 }
 
