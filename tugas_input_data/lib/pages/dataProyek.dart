@@ -2,31 +2,32 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:toastification/toastification.dart';
 
 class Customer {
   String pelangganProyek;
-  String Pelanggan;
+  String pelanggan;
   String telpFax;
   String email;
 
   Customer({
     required this.pelangganProyek,
-    required this.Pelanggan,
+    required this.pelanggan,
     required this.telpFax,
     required this.email,
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         pelangganProyek: json['pelangganProyek'] as String,
-        Pelanggan: json['Pelanggan'] as String,
+        pelanggan: json['pelanggan'] as String,
         telpFax: json['telpFax'] as String,
         email: json['email'] as String,
       );
 
   Map<String, dynamic> toJson() => {
         'pelangganProyek': pelangganProyek,
-        'Pelanggan': Pelanggan,
+        'pelanggan': pelanggan,
         'telpFax': telpFax,
         'email': email,
       };
@@ -38,38 +39,55 @@ class DataProyek extends StatefulWidget {
 }
 
 class _DataProyekState extends State<DataProyek> {
-  List<Customer> customers = [];
-  final TextEditingController _PelangganController = TextEditingController();
+  List<Customer> db_proyek = [];
+  final TextEditingController _pelangganController = TextEditingController();
   final TextEditingController _telpFaxController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  String? _selectedpelangganProyek;
+  String? _selectedPelangganProyek;
+  bool isLoading = true;
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<void> _loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encodedData = prefs.getStringList('customers');
-    if (encodedData != null) {
-      setState(() {
-        customers = encodedData
-            .map((data) => Customer.fromJson(jsonDecode(data)))
-            .toList();
-      });
-    }
+    final snapshot = await db.collection('db_proyek').get();
+    setState(() {
+      db_proyek =
+          snapshot.docs.map((doc) => Customer.fromJson(doc.data())).toList();
+      isLoading = false; // Data fetched, stop loading
+    });
   }
 
-  Future<void> _saveData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encodedData =
-        customers.map((customer) => jsonEncode(customer.toJson())).toList();
-    prefs.setStringList('customers', encodedData);
+  Future<void> _saveData(Customer customer) async {
+    await db.collection('db_proyek').add(customer.toJson());
+  }
+
+  Future<void> _deleteData(String pelangganProyek) async {
+    final snapshot = await db
+        .collection('db_proyek')
+        .where('pelangganProyek', isEqualTo: pelangganProyek)
+        .get();
+    for (var doc in snapshot.docs) {
+      await db.collection('db_proyek').doc(doc.id).delete();
+    }
+    toastification.show(
+      type: ToastificationType.success,
+      style: ToastificationStyle.fillColored,
+      icon: const Icon(Icons.check),
+      primaryColor: Colors.green,
+      backgroundColor: Colors.white,
+      context: context, // optional if you use ToastificationWrapper
+      title: Text('data telah di hapus'),
+      autoCloseDuration: const Duration(seconds: 3),
+    );
   }
 
   void addCustomer() {
-    final String Pelanggan = _PelangganController.text;
+    final String pelanggan = _pelangganController.text;
     final String telpFax = _telpFaxController.text;
     final String email = _emailController.text;
 
-    if (_selectedpelangganProyek == null ||
-        Pelanggan.isEmpty ||
+    if (_selectedPelangganProyek == null ||
+        pelanggan.isEmpty ||
         telpFax.isEmpty ||
         email.isEmpty) {
       showToast('Semua field harus diisi');
@@ -77,37 +95,41 @@ class _DataProyekState extends State<DataProyek> {
     }
 
     final newCustomer = Customer(
-      pelangganProyek: _selectedpelangganProyek!,
-      Pelanggan: Pelanggan,
+      pelangganProyek: _selectedPelangganProyek!,
+      pelanggan: pelanggan,
       telpFax: telpFax,
       email: email,
     );
 
     setState(() {
-      customers.add(newCustomer);
+      db_proyek.add(newCustomer);
     });
 
-    _PelangganController.clear();
+    _pelangganController.clear();
     _telpFaxController.clear();
     _emailController.clear();
+    _saveData(newCustomer);
   }
 
   void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0,
+    toastification.show(
+      alignment: Alignment.bottomCenter,
+      type: ToastificationType.error,
+      style: ToastificationStyle.fillColored,
+      icon: const Icon(Icons.cancel),
+
+      context: context, // optional if you use ToastificationWrapper
+      title: Text(message),
+      autoCloseDuration: const Duration(seconds: 3),
+      showProgressBar: false,
+      dragToClose: true,
     );
   }
 
   void onChangedFunction(value) {
     setState(() {
       if (value != null) {
-        _selectedpelangganProyek = value;
+        _selectedPelangganProyek = value;
       } else {
         showToast('Nilai tidak boleh kosong');
       }
@@ -115,9 +137,11 @@ class _DataProyekState extends State<DataProyek> {
   }
 
   void deleteCustomer(int index) {
+    final customer = db_proyek[index];
     setState(() {
-      customers.removeAt(index);
+      db_proyek.removeAt(index);
     });
+    _deleteData(customer.pelangganProyek);
   }
 
   @override
@@ -132,86 +156,88 @@ class _DataProyekState extends State<DataProyek> {
       appBar: AppBar(
         title: Text('Data Proyek'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: customers.length,
-              itemBuilder: (context, index) {
-                final customer = customers[index];
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Colors.blue[300],
-                      borderRadius: BorderRadius.circular(10)),
-                  child: ListTile(
-                    title: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                        children: [
-                          const TextSpan(
-                            text: 'Kode Pelanggan: ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w200,
-                            ),
-                          ),
-                          TextSpan(
-                            text: customer.pelangganProyek,
-                            style: const TextStyle(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Nama Pelanggan: ${customer.Pelanggan}'),
-                        Text('Telp/Fax: ${customer.telpFax}'),
-                        Text('Email: ${customer.email}'),
-                      ],
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text('Hapus Data'),
-                              content: Text(
-                                  'Apakah Anda yakin ingin menghapus data ini?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    deleteCustomer(index);
-                                    _saveData();
-                                  },
-                                  child: Text('Hapus'),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator()) // Show loading indicator
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: db_proyek.length,
+                    itemBuilder: (context, index) {
+                      final customer = db_proyek[index];
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.blue[300],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: ListTile(
+                          title: RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                              children: [
+                                const TextSpan(
+                                  text: 'Kode Pelanggan: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w200,
+                                  ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('Batal'),
+                                TextSpan(
+                                  text: customer.pelangganProyek,
+                                  style: const TextStyle(),
                                 ),
                               ],
-                            );
-                          },
-                        );
-                      },
-                    ),
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Nama Pelanggan: ${customer.pelanggan}'),
+                              Text('Telp/Fax: ${customer.telpFax}'),
+                              Text('Email: ${customer.email}'),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Hapus Data'),
+                                    content: Text(
+                                        'Apakah Anda yakin ingin menghapus data ini?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          deleteCustomer(index);
+                                        },
+                                        child: Text('Hapus'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Batal'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
@@ -223,7 +249,7 @@ class _DataProyekState extends State<DataProyek> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<String>(
-                      value: _selectedpelangganProyek,
+                      value: _selectedPelangganProyek,
                       items: ["P001", "P002", "P003"]
                           .map((kode) => DropdownMenuItem<String>(
                                 value: kode,
@@ -239,7 +265,7 @@ class _DataProyekState extends State<DataProyek> {
                     ),
                     SizedBox(height: 10),
                     TextFormField(
-                      controller: _PelangganController,
+                      controller: _pelangganController,
                       decoration: InputDecoration(
                         labelText: 'Nama Pelanggan',
                       ),
@@ -265,7 +291,6 @@ class _DataProyekState extends State<DataProyek> {
                     onPressed: () {
                       addCustomer();
                       Navigator.pop(context);
-                      _saveData();
                     },
                     child: Text('Tambah'),
                   ),

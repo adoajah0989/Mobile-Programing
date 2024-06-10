@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 
 class Customer {
   String kodePelanggan;
@@ -44,24 +44,38 @@ class _DataPelangganState extends State<DataPelanggan> {
   final TextEditingController _NPWPController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
   String? _selectedKodePelanggan;
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<void> _loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encodedData = prefs.getStringList('customers');
-    if (encodedData != null) {
-      setState(() {
-        customers = encodedData
-            .map((data) => Customer.fromJson(jsonDecode(data)))
-            .toList();
-      });
-    }
+    final snapshot = await db.collection('customers').get();
+    setState(() {
+      customers =
+          snapshot.docs.map((doc) => Customer.fromJson(doc.data())).toList();
+    });
   }
 
-  Future<void> _saveData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encodedData =
-        customers.map((customer) => jsonEncode(customer.toJson())).toList();
-    prefs.setStringList('customers', encodedData);
+  Future<void> _saveData(Customer customer) async {
+    await db.collection('customers').add(customer.toJson());
+  }
+
+  Future<void> _deleteData(String kodePelanggan) async {
+    final snapshot = await db
+        .collection('customers')
+        .where('kodePelanggan', isEqualTo: kodePelanggan)
+        .get();
+    for (var doc in snapshot.docs) {
+      await db.collection('customers').doc(doc.id).delete();
+    }
+    toastification.show(
+      type: ToastificationType.success,
+      style: ToastificationStyle.fillColored,
+      icon: const Icon(Icons.check),
+      primaryColor: Colors.green,
+      backgroundColor: Colors.white,
+      context: context,
+      title: const Text('Data telah dihapus'),
+      autoCloseDuration: const Duration(seconds: 3),
+    );
   }
 
   void addCustomer() {
@@ -91,17 +105,20 @@ class _DataPelangganState extends State<DataPelanggan> {
     _namaPelangganController.clear();
     _NPWPController.clear();
     _alamatController.clear();
+    _saveData(newCustomer);
   }
 
   void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0,
+    toastification.show(
+      alignment: Alignment.bottomCenter,
+      type: ToastificationType.error,
+      style: ToastificationStyle.fillColored,
+      icon: const Icon(Icons.cancel),
+      context: context,
+      title: Text(message),
+      autoCloseDuration: const Duration(seconds: 3),
+      showProgressBar: false,
+      dragToClose: true,
     );
   }
 
@@ -116,9 +133,11 @@ class _DataPelangganState extends State<DataPelanggan> {
   }
 
   void deleteCustomer(int index) {
+    final customer = customers[index];
     setState(() {
       customers.removeAt(index);
     });
+    _deleteData(customer.kodePelanggan);
   }
 
   @override
@@ -172,7 +191,7 @@ class _DataPelangganState extends State<DataPelanggan> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Nama Pelanggan: ${customer.namaPelanggan}'),
-                        Text('Telp/Fax: ${customer.NPWP}'),
+                        Text('NPWP: ${customer.NPWP}'),
                         Text('Alamat: ${customer.alamat}'),
                       ],
                     ),
@@ -192,7 +211,6 @@ class _DataPelangganState extends State<DataPelanggan> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                     deleteCustomer(index);
-                                    _saveData();
                                   },
                                   child: Text('Hapus'),
                                 ),
@@ -253,7 +271,7 @@ class _DataPelangganState extends State<DataPelanggan> {
                     TextFormField(
                       controller: _NPWPController,
                       decoration: InputDecoration(
-                        labelText: 'Telp/Fax',
+                        labelText: 'NPWP',
                       ),
                     ),
                     SizedBox(height: 10),
@@ -270,7 +288,6 @@ class _DataPelangganState extends State<DataPelanggan> {
                     onPressed: () {
                       addCustomer();
                       Navigator.pop(context);
-                      _saveData();
                     },
                     child: Text('Tambah'),
                   ),

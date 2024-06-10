@@ -13,7 +13,6 @@ import 'package:tugas_input_data/pages/signin.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseFirestore db = FirebaseFirestore.instance;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

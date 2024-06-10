@@ -1,9 +1,8 @@
-import 'dart:convert'; // Tambahkan baris ini untuk mengimpor dart:convert
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 
 class Task {
   String kodeLayanan;
@@ -19,10 +18,17 @@ class Task {
         Layanan: jsonDecode(json)['Layanan'] as String,
       );
 
-  String toJson() => jsonEncode({
+  factory Task.fromMap(Map<String, dynamic> map) => Task(
+        kodeLayanan: map['kodeLayanan'] as String,
+        Layanan: map['Layanan'] as String,
+      );
+
+  Map<String, dynamic> toMap() => {
         'kodeLayanan': kodeLayanan,
         'Layanan': Layanan,
-      });
+      };
+
+  String toJson() => jsonEncode(toMap());
 }
 
 class DataJenisPage extends StatefulWidget {
@@ -37,19 +43,34 @@ class _DataJenisPageState extends State<DataJenisPage> {
   String? _selectedKodeLayanan;
 
   Future<void> _loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encodedData = prefs.getStringList('tasks');
-    if (encodedData != null) {
-      setState(() {
-        tasks = encodedData.map((data) => Task.fromJson(data)).toList();
-      });
-    }
+    final snapshot = await db.collection('tasks').get();
+    setState(() {
+      tasks = snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
+    });
   }
 
-  Future<void> _saveData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encodedData = tasks.map((task) => task.toJson()).toList();
-    prefs.setStringList('tasks', encodedData);
+  Future<void> _saveData(Task task) async {
+    await db.collection('tasks').add(task.toMap());
+  }
+
+  Future<void> _deleteData(String kodeLayanan) async {
+    final snapshot = await db
+        .collection('tasks')
+        .where('kodeLayanan', isEqualTo: kodeLayanan)
+        .get();
+    for (var doc in snapshot.docs) {
+      await db.collection('tasks').doc(doc.id).delete();
+    }
+    toastification.show(
+      type: ToastificationType.success,
+      style: ToastificationStyle.fillColored,
+      icon: const Icon(Icons.check),
+      primaryColor: Colors.green,
+      backgroundColor: Colors.white,
+      context: context,
+      title: const Text('Data telah dihapus'),
+      autoCloseDuration: const Duration(seconds: 3),
+    );
   }
 
   void addTask() {
@@ -70,17 +91,20 @@ class _DataJenisPageState extends State<DataJenisPage> {
     });
 
     _LayananController.clear();
+    _saveData(newTask);
   }
 
   void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0,
+    toastification.show(
+      alignment: Alignment.bottomCenter,
+      type: ToastificationType.error,
+      style: ToastificationStyle.fillColored,
+      icon: const Icon(Icons.cancel),
+      context: context,
+      title: Text(message),
+      autoCloseDuration: const Duration(seconds: 3),
+      showProgressBar: false,
+      dragToClose: true,
     );
   }
 
@@ -95,9 +119,11 @@ class _DataJenisPageState extends State<DataJenisPage> {
   }
 
   void deleteTask(int index) {
+    final task = tasks[index];
     setState(() {
       tasks.removeAt(index);
     });
+    _deleteData(task.kodeLayanan);
   }
 
   @override
@@ -123,28 +149,26 @@ class _DataJenisPageState extends State<DataJenisPage> {
                   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      color: Colors.blue[300],
-                      borderRadius: BorderRadius.circular(10)),
+                    color: Colors.blue[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: ListTile(
                     title: RichText(
                       text: TextSpan(
                         style: const TextStyle(
-                          color: Colors.white, // Ganti dengan warna yang sesuai
-                          fontSize: 16, // Ganti dengan ukuran font yang sesuai
+                          color: Colors.white,
+                          fontSize: 16,
                         ),
                         children: [
                           const TextSpan(
                             text: 'Kode Layanan: ',
                             style: TextStyle(
                               fontWeight: FontWeight.w200,
-                              // Ganti dengan gaya font yang sesuai
                             ),
                           ),
                           TextSpan(
                             text: task.kodeLayanan,
-                            style: const TextStyle(
-                                // Gaya font untuk kode layanan bisa berbeda di sini
-                                ),
+                            style: const TextStyle(),
                           ),
                         ],
                       ),
@@ -159,13 +183,13 @@ class _DataJenisPageState extends State<DataJenisPage> {
                             return AlertDialog(
                               title: Text('Hapus Data'),
                               content: Text(
-                                  'Apakah Anda yakin ingin menghapus data ini?'),
+                                'Apakah Anda yakin ingin menghapus data ini?',
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                     deleteTask(index);
-                                    _saveData(); // Simpan perubahan setelah menghapus data
                                   },
                                   child: Text('Hapus'),
                                 ),
@@ -190,70 +214,59 @@ class _DataJenisPageState extends State<DataJenisPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // showDialog(
-          //   context: context,
-          //   builder: (context) {
-          //     return AlertDialog(
-          //       title: Text('Tambah Data'),
-          //       content: Column(
-          //         mainAxisSize: MainAxisSize.min,
-          //         children: [
-          //           DropdownButtonFormField<String>(
-          //             value: _selectedKodeLayanan,
-          //             items: ["A001", "A002", "A003"]
-          //                 .map((kode) => DropdownMenuItem<String>(
-          //                       value: kode,
-          //                       child: Text(kode),
-          //                     ))
-          //                 .toList(),
-          //             onChanged: (value) {
-          //               setState(() {
-          //                 onChangedFunction(value);
-          //               });
-          //             },
-          //             decoration: InputDecoration(labelText: 'Kode Layanan'),
-          //           ),
-          //           SizedBox(height: 10),
-          //           TextFormField(
-          //             controller: _LayananController,
-          //             decoration: InputDecoration(
-          //               labelText: 'Nama Layanan',
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //       actions: [
-          //         TextButton(
-          //           onPressed: () {
-          //             addTask();
-          //             Navigator.pop(context);
-          //             _saveData(); // Simpan perubahan setelah menambahkan data
-          //           },
-          //           child: Text('Tambah'),
-          //         ),
-          //         TextButton(
-          //           onPressed: () {
-          //             Navigator.pop(context);
-          //           },
-          //           child: Text(
-          //             'Batal',
-          //             style: TextStyle(color: Colors.red[400]),
-          //           ),
-          //         ),
-          //       ],
-          //     );
-          //   },
-          // );
-          // Create a new user with a first and last name
-          final user = <String, dynamic>{
-            "first": "Ada",
-            "last": "Lovelace",
-            "born": 1815
-          };
-
-// Add a new document with a generated ID
-          db.collection("users").add(user).then((DocumentReference doc) =>
-              print('DocumentSnapshot added with ID: ${doc.id}'));
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Tambah Data'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<String>(
+                      value: _selectedKodeLayanan,
+                      items: ["A001", "A002", "A003"]
+                          .map((kode) => DropdownMenuItem<String>(
+                                value: kode,
+                                child: Text(kode),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          onChangedFunction(value);
+                        });
+                      },
+                      decoration: InputDecoration(labelText: 'Kode Layanan'),
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: _LayananController,
+                      decoration: InputDecoration(
+                        labelText: 'Nama Layanan',
+                      ),
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      addTask();
+                      Navigator.pop(context);
+                    },
+                    child: Text('Tambah'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Batal',
+                      style: TextStyle(color: Colors.red[400]),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
         },
         child: Icon(Icons.add),
       ),

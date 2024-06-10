@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:toastification/toastification.dart';
 
 class Task {
   String kodeKategori;
@@ -100,14 +102,17 @@ class _KategoriLayananState extends State<KategoriLayanan> {
   }
 
   void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0,
+    toastification.show(
+      alignment: Alignment.bottomCenter,
+      type: ToastificationType.error,
+      style: ToastificationStyle.fillColored,
+      icon: const Icon(Icons.cancel),
+
+      context: context, // optional if you use ToastificationWrapper
+      title: Text(message),
+      autoCloseDuration: const Duration(seconds: 3),
+      showProgressBar: false,
+      dragToClose: true,
     );
   }
 
@@ -125,6 +130,10 @@ class _KategoriLayananState extends State<KategoriLayanan> {
     setState(() {
       tasks.removeAt(index);
     });
+
+    showToast('Data berhasil dihapus');
+
+    _saveData();
   }
 
   @override
