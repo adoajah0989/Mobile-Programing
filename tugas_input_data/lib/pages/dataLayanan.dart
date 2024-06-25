@@ -1,31 +1,31 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-class Task {
+class Layanan {
   String kodeLayanan;
-  String Layanan;
+  String layanan;
 
-  Task({
+  Layanan({
     required this.kodeLayanan,
-    required this.Layanan,
+    required this.layanan,
   });
 
-  factory Task.fromJson(String json) => Task(
+  factory Layanan.fromJson(String json) => Layanan(
         kodeLayanan: jsonDecode(json)['kodeLayanan'] as String,
-        Layanan: jsonDecode(json)['Layanan'] as String,
+        layanan: jsonDecode(json)['layanan'] as String,
       );
 
-  factory Task.fromMap(Map<String, dynamic> map) => Task(
+  factory Layanan.fromMap(Map<String, dynamic> map) => Layanan(
         kodeLayanan: map['kodeLayanan'] as String,
-        Layanan: map['Layanan'] as String,
+        layanan: map['layanan'] as String,
       );
 
   Map<String, dynamic> toMap() => {
         'kodeLayanan': kodeLayanan,
-        'Layanan': Layanan,
+        'layanan': layanan,
       };
 
   String toJson() => jsonEncode(toMap());
@@ -37,29 +37,30 @@ class DataJenisPage extends StatefulWidget {
 }
 
 class _DataJenisPageState extends State<DataJenisPage> {
-  List<Task> tasks = [];
-  final TextEditingController _LayananController = TextEditingController();
+  List<Layanan> layananList = [];
+  final TextEditingController _layananController = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
   String? _selectedKodeLayanan;
 
   Future<void> _loadData() async {
-    final snapshot = await db.collection('tasks').get();
+    final snapshot = await db.collection('layanan').get();
     setState(() {
-      tasks = snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
+      layananList =
+          snapshot.docs.map((doc) => Layanan.fromMap(doc.data())).toList();
     });
   }
 
-  Future<void> _saveData(Task task) async {
-    await db.collection('tasks').add(task.toMap());
+  Future<void> _saveData(Layanan layanan) async {
+    await db.collection('layanan').add(layanan.toMap());
   }
 
   Future<void> _deleteData(String kodeLayanan) async {
     final snapshot = await db
-        .collection('tasks')
+        .collection('layanan')
         .where('kodeLayanan', isEqualTo: kodeLayanan)
         .get();
     for (var doc in snapshot.docs) {
-      await db.collection('tasks').doc(doc.id).delete();
+      await db.collection('layanan').doc(doc.id).delete();
     }
     toastification.show(
       type: ToastificationType.success,
@@ -73,25 +74,25 @@ class _DataJenisPageState extends State<DataJenisPage> {
     );
   }
 
-  void addTask() {
-    final String Layanan = _LayananController.text;
+  void addLayanan() {
+    final String layanan = _layananController.text;
 
-    if (_selectedKodeLayanan == null || Layanan.isEmpty) {
+    if (_selectedKodeLayanan == null || layanan.isEmpty) {
       showToast('Kode layanan dan nama layanan tidak boleh kosong');
       return;
     }
 
-    final newTask = Task(
+    final newLayanan = Layanan(
       kodeLayanan: _selectedKodeLayanan!,
-      Layanan: Layanan,
+      layanan: layanan,
     );
 
     setState(() {
-      tasks.add(newTask);
+      layananList.add(newLayanan);
     });
 
-    _LayananController.clear();
-    _saveData(newTask);
+    _layananController.clear();
+    _saveData(newLayanan);
   }
 
   void showToast(String message) {
@@ -118,12 +119,12 @@ class _DataJenisPageState extends State<DataJenisPage> {
     });
   }
 
-  void deleteTask(int index) {
-    final task = tasks[index];
+  void deleteLayanan(int index) {
+    final layanan = layananList[index];
     setState(() {
-      tasks.removeAt(index);
+      layananList.removeAt(index);
     });
-    _deleteData(task.kodeLayanan);
+    _deleteData(layanan.kodeLayanan);
   }
 
   @override
@@ -142,9 +143,9 @@ class _DataJenisPageState extends State<DataJenisPage> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: tasks.length,
+              itemCount: layananList.length,
               itemBuilder: (context, index) {
-                final task = tasks[index];
+                final layanan = layananList[index];
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   padding: EdgeInsets.all(10),
@@ -167,13 +168,13 @@ class _DataJenisPageState extends State<DataJenisPage> {
                             ),
                           ),
                           TextSpan(
-                            text: task.kodeLayanan,
+                            text: layanan.kodeLayanan,
                             style: const TextStyle(),
                           ),
                         ],
                       ),
                     ),
-                    subtitle: Text('Nama Layanan: ${task.Layanan}'),
+                    subtitle: Text('Nama Layanan: ${layanan.layanan}'),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
@@ -189,7 +190,7 @@ class _DataJenisPageState extends State<DataJenisPage> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    deleteTask(index);
+                                    deleteLayanan(index);
                                   },
                                   child: Text('Hapus'),
                                 ),
@@ -239,7 +240,7 @@ class _DataJenisPageState extends State<DataJenisPage> {
                     ),
                     SizedBox(height: 10),
                     TextFormField(
-                      controller: _LayananController,
+                      controller: _layananController,
                       decoration: InputDecoration(
                         labelText: 'Nama Layanan',
                       ),
@@ -249,7 +250,7 @@ class _DataJenisPageState extends State<DataJenisPage> {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      addTask();
+                      addLayanan();
                       Navigator.pop(context);
                     },
                     child: Text('Tambah'),
@@ -274,7 +275,9 @@ class _DataJenisPageState extends State<DataJenisPage> {
   }
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MaterialApp(
     home: DataJenisPage(),
   ));

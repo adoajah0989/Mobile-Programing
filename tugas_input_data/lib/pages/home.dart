@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:tugas_input_data/components/buttonText.dart';
 import 'package:tugas_input_data/pages/MenuMaster.dart';
+import 'package:tugas_input_data/pages/MenuTransaksi.dart';
 import 'package:tugas_input_data/pages/dataLayanan.dart';
 
 class home extends StatelessWidget {
@@ -136,7 +137,13 @@ class home extends StatelessWidget {
                               ),
                               CustomTextButton(
                                 icon: "🔬",
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MainMenuPage()));
+                                },
                                 Judul: 'Data transaksi',
                               ),
                               CustomTextButton(

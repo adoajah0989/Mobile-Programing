@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:tugas_input_data/pages/transaksi_page/DataKuitansiPage.dart';
+import 'package:tugas_input_data/pages/transaksi_page/DataTerimaHasilTestPage.dart';
+import 'package:tugas_input_data/pages/transaksi_page/DataTransaksiPengujianPage.dart';
+import 'package:tugas_input_data/pages/transaksi_page/HasilPengujianPage.dart';
 
-import 'package:tugas_input_data/pages/KategoriLayanan.dart';
-import 'package:tugas_input_data/pages/dataLayanan.dart';
-import 'package:tugas_input_data/pages/dataProyek.dart';
-import 'package:tugas_input_data/pages/datapelanggan.dart';
-
-class MenuMaster extends StatelessWidget {
+class MainMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +26,13 @@ class MenuMaster extends StatelessWidget {
           children: [
             Card(
               child: ListTile(
-                leading: Icon(Icons.person, color: Colors.teal[700]),
-                title: Text('data jenis layanan'),
+                leading: Icon(Icons.archive, color: Colors.teal[700]),
+                title: Text('Data Transaksi Pengujian'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DataJenisPage(),
+                      builder: (context) => DataTransaksiPengujianPage(),
                     ),
                   );
                 },
@@ -40,13 +40,13 @@ class MenuMaster extends StatelessWidget {
             ),
             Card(
               child: ListTile(
-                leading: Icon(Icons.note_add_outlined, color: Colors.teal[700]),
-                title: Text('data proyek'),
+                leading: Icon(Icons.done, color: Colors.teal[700]),
+                title: Text('Hasil Pengujian'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DataProyek(),
+                      builder: (context) => HasilPengujianPage(),
                     ),
                   );
                 },
@@ -54,13 +54,13 @@ class MenuMaster extends StatelessWidget {
             ),
             Card(
               child: ListTile(
-                leading: Icon(Icons.people, color: Colors.teal[700]),
-                title: Text('kategori layanan'),
+                leading: Icon(Icons.receipt, color: Colors.teal[700]),
+                title: Text('Data Kuitansi'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => KategoriLayanan(),
+                      builder: (context) => DataKuitansiPage(),
                     ),
                   );
                 },
@@ -68,13 +68,13 @@ class MenuMaster extends StatelessWidget {
             ),
             Card(
               child: ListTile(
-                leading: Icon(Icons.verified_rounded, color: Colors.teal[700]),
-                title: Text('Data pelanggan'),
+                leading: Icon(Icons.verified, color: Colors.teal[700]),
+                title: Text('Data Terima Hasil Test'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DataPelanggan(),
+                      builder: (context) => DataTerimaHasilTestPage(),
                     ),
                   );
                 },
